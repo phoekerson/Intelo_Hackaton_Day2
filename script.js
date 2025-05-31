@@ -8,6 +8,114 @@ class PitchGenerator {
     init() {
         this.bindEvents();
         this.checkApiKey();
+        this.setupInputValidation();
+    }
+
+    setupInputValidation() {
+        const inputs = ['projectIdea', 'targetMarket', 'businessModel', 'competition'];
+        
+        inputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            
+            // Ajouter un message d'erreur sous chaque input
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message-input';
+            errorDiv.style.color = 'red';
+            errorDiv.style.fontSize = '0.8em';
+            errorDiv.style.marginTop = '5px';
+            errorDiv.style.display = 'none';
+            input.parentNode.insertBefore(errorDiv, input.nextSibling);
+
+            // Validation en temps réel pendant la saisie
+            input.addEventListener('input', (e) => {
+                this.validateInput(e.target);
+            });
+
+            // Validation au focus out
+            input.addEventListener('blur', (e) => {
+                this.validateInput(e.target);
+            });
+        });
+    }
+
+    validateInput(input) {
+        const value = input.value;
+        const errorDiv = input.nextElementSibling;
+        const specialCharsRegex = /[!@#$%^&*()_+\-=\[\]{};:"\\|<>/?]+/;
+        const numbersRegex = /\d/;
+        
+        // Réinitialiser les styles
+        input.style.borderColor = '';
+        errorDiv.style.display = 'none';
+        errorDiv.textContent = '';
+
+        // Vérifications
+        if (value.trim() === '') {
+            this.showInputError(input, errorDiv, 'Ce champ ne peut pas être vide');
+            return false;
+        }
+
+        if (numbersRegex.test(value)) {
+            this.showInputError(input, errorDiv, 'Les chiffres ne sont pas autorisés dans ce champ');
+            return false;
+        }
+
+        if (specialCharsRegex.test(value)) {
+            this.showInputError(input, errorDiv, 'Les caractères spéciaux ne sont pas autorisés');
+            return false;
+        }
+
+        if (value.length < 10) {
+            this.showInputError(input, errorDiv, 'Le texte doit contenir au moins 10 caractères');
+            return false;
+        }
+
+        return true;
+    }
+
+    showInputError(input, errorDiv, message) {
+        input.style.borderColor = 'red';
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+    }
+
+    validateForm(formData) {
+        const requiredFields = ['projectIdea', 'targetMarket', 'businessModel', 'competition'];
+        let isValid = true;
+
+        for (const field of requiredFields) {
+            const input = document.getElementById(field);
+            if (!this.validateInput(input)) {
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
+            return false;
+        }
+
+        // Validation supplémentaire des longueurs minimales
+        const minLengths = {
+            projectIdea: 20,
+            targetMarket: 10,
+            businessModel: 10,
+            competition: 20
+        };
+
+        for (const [field, minLength] of Object.entries(minLengths)) {
+            if (formData[field].length < minLength) {
+                const input = document.getElementById(field);
+                const errorDiv = input.nextElementSibling;
+                this.showInputError(
+                    input,
+                    errorDiv,
+                    `Le texte doit contenir au moins ${minLength} caractères`
+                );
+                isValid = false;
+            }
+        }
+
+        return isValid;
     }
 
     bindEvents() {
@@ -111,17 +219,6 @@ class PitchGenerator {
             businessModel: document.getElementById('businessModel').value.trim(),
             competition: document.getElementById('competition').value.trim()
         };
-    }
-
-    validateForm(formData) {
-        const requiredFields = ['projectIdea', 'targetMarket', 'businessModel', 'competition'];
-        for (const field of requiredFields) {
-            if (!formData[field]) {
-                alert(`Veuillez remplir le champ: ${this.getFieldLabel(field)}`);
-                return false;
-            }
-        }
-        return true;
     }
 
     getFieldLabel(field) {
