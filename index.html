@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitch Generator - Assistant IA</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Pitch Generator</h1>
+            <p>Créez un pitch professionnel pour votre projet business en quelques minutes</p>
+        </header>
+
+        <main>
+            <!-- Formulaire de saisie -->
+            <section class="form-section" id="formSection">
+                <div class="card">
+                    <h2>Décrivez votre projet</h2>
+                    <form id="projectForm">
+                        <div class="form-group">
+                            <label for="projectIdea">💡 Décrivez votre idée de projet :</label>
+                            <textarea id="projectIdea" rows="4" placeholder="Ex: Une application mobile qui aide les étudiants à trouver des colocataires compatibles..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="targetMarket">🎯 Quel est votre marché cible ?</label>
+                            <input type="text" id="targetMarket" placeholder="Ex: Étudiants universitaires, jeunes professionnels..." required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="businessModel">💰 Comment comptez-vous générer des revenus ?</label>
+                            <input type="text" id="businessModel" placeholder="Ex: Commission sur les transactions, abonnement mensuel..." required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="competition">🏆 Quelle est votre différenciation par rapport à la concurrence ?</label>
+                            <textarea id="competition" rows="3" placeholder="Ex: Algorithme de matching basé sur les habitudes de vie..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="generateBtn">
+                            <span id="btnText">Générer mon pitch</span>
+                            <div id="loader" class="loader hidden"></div>
+                        </button>
+                        
+                        <button type="button" class="btn-secondary" id="testBtn" style="width: 100%; margin-top: 10px;">
+                            🧪 Test sans API (démo)
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Résultat du pitch -->
+            <section class="result-section hidden" id="resultSection">
+                <div class="card result-card">
+                    <div class="result-header">
+                        <h2>🎯 Votre Pitch Professionnel</h2>
+                        <div class="action-buttons">
+                            <button class="btn-secondary" id="editBtn">✏️ Modifier</button>
+                            <button class="btn-secondary" id="shareBtn">📤 Partager</button>
+                            <button class="btn-secondary" id="exportBtn">📄 Exporter PDF</button>
+                        </div>
+                    </div>
+                    
+                    <div class="pitch-content" id="pitchContent">
+                        <!-- Le contenu généré sera inséré ici -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Message d'erreur -->
+            <div class="error-message hidden" id="errorMessage">
+                <p>⚠️ Erreur lors de la génération du pitch. Veuillez vérifier votre clé API et réessayer.</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Propulsé par l'IA Gemini • Hackathon 2025</p>
+        </footer>
+    </div>
+
+    <!-- Modal de configuration API -->
+    <div class="modal hidden" id="apiModal">
+        <div class="modal-content">
+            <h3>🔑 Configuration API</h3>
+            <p>Veuillez entrer votre clé API Gemini pour utiliser le générateur :</p>
+            <input type="password" id="apiKeyInput" placeholder="Votre clé API Gemini">
+            <div class="modal-buttons">
+                <button class="btn-primary" id="saveApiKey">Enregistrer</button>
+                <button class="btn-secondary" id="cancelApiKey">Annuler</button>
+            </div>
+            <p class="api-info">
+                <small>🔒 Votre clé API est stockée localement et n'est jamais partagée.</small>
+            </p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
