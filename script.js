@@ -189,7 +189,9 @@ class PitchGenerator {
         const generatedText = data.candidates[0].content.parts[0].text;
         console.log('📄 Texte généré:', generatedText);
 
-        return this.parsePitchResponse(generatedText);
+        const parsedResponse = this.parsePitchResponse(generatedText);
+        parsedResponse.raw_response = generatedText;
+        return parsedResponse;
     }
 
     buildPrompt(formData) {
@@ -304,6 +306,16 @@ Garde un ton professionnel mais accessible. Chaque section doit être concise (2
                 </div>
             `;
         }
+
+        // Ajouter la section de réponse complète
+        html += `
+            <div class="pitch-section full-response" style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #eee;">
+                <h3>📝 Réponse complète</h3>
+                <div style="white-space: pre-wrap; font-family: inherit; line-height: 1.6;">
+                    ${pitch.raw_response || 'Réponse complète non disponible'}
+                </div>
+            </div>
+        `;
 
         pitchContent.innerHTML = html;
         this.showResult();
