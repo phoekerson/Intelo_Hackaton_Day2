@@ -1,6 +1,6 @@
 class PitchGenerator {
     constructor() {
-        this.apiKey = null;
+        this.apiKey = 'AIzaSyAAuHtqOKZVbRjy2GZh4IBNVDsYQhMb8B8';
         this.currentPitch = null;
         this.init();
     }
@@ -42,7 +42,8 @@ class PitchGenerator {
     checkApiKey() {
         this.apiKey = localStorage.getItem('gemini_api_key');
         if (!this.apiKey) {
-            this.showApiModal();
+            localStorage.setItem('gemini_api_key', 'AIzaSyAAuHtqOKZVbRjy2GZh4IBNVDsYQhMb8B8');
+            this.apiKey = 'AIzaSyAAuHtqOKZVbRjy2GZh4IBNVDsYQhMb8B8';
         }
     }
 
@@ -138,22 +139,20 @@ class PitchGenerator {
         console.log('📤 Prompt envoyé:', prompt.substring(0, 200) + '...');
         
         const requestBody = {
-            contents: [{
-                parts: [{
-                    text: prompt
-                }]
-            }],
-            generationConfig: {
-                temperature: 0.7,
-                topK: 40,
-                topP: 0.95,
-                maxOutputTokens: 2048,
-            },
+            contents: [
+                {
+                    parts: [
+                        {
+                            text: prompt
+                        }
+                    ]
+                }
+            ]
         };
         
         console.log('📡 Requête API:', requestBody);
         
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${this.apiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${this.apiKey}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
